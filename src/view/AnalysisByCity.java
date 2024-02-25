@@ -1,14 +1,19 @@
 package view;
 
 import java.awt.Color;
-import java.awt.event.*;
+import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
-import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 
 import controller.AnalysisByCityController;
@@ -17,6 +22,8 @@ import core.View;
 import model.User;
 
 public class AnalysisByCity extends View{
+	String popupStatus = "";
+
 	public AnalysisByCity(AnalysisByCityController analysisByCityController) {
 		super("지도");
 		setBounds(100, 100, 700, 840);
@@ -25,7 +32,6 @@ public class AnalysisByCity extends View{
 		RegisterController resCon = new RegisterController();
 		
 		JPopupMenu popupMenu = new JPopupMenu();
-        JMenuItem menuItem = new JMenuItem("구매하기");
 		
 		try {
 			rs = stmt.executeQuery("select * from city");
@@ -74,6 +80,8 @@ public class AnalysisByCity extends View{
 						public void mouseReleased(MouseEvent e) {
 							// TODO Auto-generated method stub
 							if(e.isPopupTrigger()){
+								popupStatus = "released";
+								
 								popupMenu.removeAll();
 								JMenuItem menuItem = new JMenuItem("판매하기");
 						        menuItem.addActionListener(new ActionListener() {
@@ -92,6 +100,8 @@ public class AnalysisByCity extends View{
 						@Override
 						public void mouseReleased(MouseEvent e) {
 							if(e.isPopupTrigger()){
+								popupStatus = "released";
+								
 								popupMenu.removeAll();
 								JMenuItem menuItem = new JMenuItem("구매하기");
 						        menuItem.addActionListener(new ActionListener() {
@@ -107,7 +117,43 @@ public class AnalysisByCity extends View{
 						
 					});
 				}
-				
+				cityname[i].addMouseListener(new MouseAdapter() {
+
+					@Override
+					public void mouseEntered(MouseEvent e){
+						if(e.getComponent().getForeground() != Color.green)
+							e.getComponent().setForeground(Color.red);
+							
+						popupStatus = "entered";
+						
+						popupMenu.removeAll();
+						JMenuItem menuItem = new JMenuItem("안녕");
+						menuItem.setEnabled(false);
+				        popupMenu.add(menuItem);
+	                    popupMenu.show(e.getComponent(), e.getX(), e.getY());
+					}
+
+					@Override
+					public void mouseExited(MouseEvent e) {
+						if(e.getComponent().getForeground() != Color.green)
+							e.getComponent().setForeground(Color.black);
+						if(popupStatus.equals("entered")){
+							popupMenu.setVisible(false);
+						}
+					}
+					
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						for(JLabel jl: cityname){
+							if(jl.getForeground() == Color.green){
+							
+								jl.setForeground(Color.black);		
+							}
+						}
+						
+						e.getComponent().setForeground(Color.green);	
+					}
+				});
 				
 				getContentPane().add(cityname[i]);
 				++i;
