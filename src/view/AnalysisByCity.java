@@ -26,12 +26,6 @@ public class AnalysisByCity extends View{
 		
 		JPopupMenu popupMenu = new JPopupMenu();
         JMenuItem menuItem = new JMenuItem("구매하기");
-        menuItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "메뉴 항목 1을 클릭했습니다.");
-            }
-        });
-        popupMenu.add(menuItem);
 		
 		try {
 			rs = stmt.executeQuery("select * from city");
@@ -80,9 +74,18 @@ public class AnalysisByCity extends View{
 				if(isMyCity) {
 					cityname[i].addMouseListener(new MouseAdapter() {
 						@Override
-						public void mouseClicked(MouseEvent e) {
+						public void mouseReleased(MouseEvent e) {
 							// TODO Auto-generated method stub
-							if (e.isPopupTrigger()) {
+							if(e.isPopupTrigger()){
+								popupMenu.removeAll();
+								JMenuItem menuItem = new JMenuItem("판매하기");
+						        menuItem.addActionListener(new ActionListener() {
+						            public void actionPerformed(ActionEvent e) {
+						                JOptionPane.showMessageDialog(null, "메뉴 항목 1을 클릭했습니다.");
+						            }
+						        });
+						        popupMenu.add(menuItem);
+						        
 			                    popupMenu.show(e.getComponent(), e.getX(), e.getY());
 			                }
 						}
@@ -90,14 +93,21 @@ public class AnalysisByCity extends View{
 				} else {
 					cityname[i].addMouseListener(new MouseAdapter() {
 						@Override
-						public void mouseClicked(MouseEvent e) {
-							// TODO Auto-generated method stubx
-							
-							if (!e.isPopupTrigger()) {
-								
+						public void mouseReleased(MouseEvent e) {
+							if(e.isPopupTrigger()){
+								popupMenu.removeAll();
+								JMenuItem menuItem = new JMenuItem("구매하기");
+						        menuItem.addActionListener(new ActionListener() {
+						            public void actionPerformed(ActionEvent e) {
+						                JOptionPane.showMessageDialog(null, "메뉴 항목 1을 클릭했습니다.");
+						            }
+						        });
+						        popupMenu.add(menuItem);
+						        
 			                    popupMenu.show(e.getComponent(), e.getX(), e.getY());
-			                }
+							}
 						}
+						
 					});
 				}
 				
@@ -132,6 +142,7 @@ public class AnalysisByCity extends View{
 	    	  popupMenu.setVisible(false);
 	      }
 		});
+		
 		
 		
 		
