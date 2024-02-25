@@ -41,24 +41,21 @@ public class AnalysisByCity extends View{
 			while(rs.next()) {
 				s = new ImageIcon(path+"瘤开/"+rs.getString("c_no")+".png");
 				
-				int width = s.getIconWidth();
-				int height = s.getIconHeight();
+				int x = rs.getInt("c_x")+s.getIconWidth()/2-20;
+				int y = rs.getInt("c_y")+s.getIconHeight()/2-10;
 				boolean isMyCity = false;
-				if(width < 40) {
-					width = 40;
-				}
 				
 				cityname[i] = new JLabel(rs.getString("c_name"));
 				
 				
-				if(cityname[i].getText().equals("面合")) {
-					width -= 50;
-					height -= 60; 
+				if(cityname[i].getText().equals("面合")) { 
+					x -= 20;
+					y -= 30;
 				} else if(cityname[i].getText().equals("版扁")) {
-					width += 40;
+					x += 20;	
 				}
 				
-				cityname[i].setBounds(rs.getInt("c_x"), rs.getInt("c_y"), width, height);
+				cityname[i].setBounds(x, y, 40, 25);
 				cityname[i].setHorizontalAlignment(SwingConstants.CENTER);
 				
 
